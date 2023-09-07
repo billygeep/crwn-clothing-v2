@@ -14,11 +14,13 @@ const defaultFormFields = {
   confirmPassword: "",
 };
 
-const SignUpForn = () => {
+const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  const resetFormFields = () => {};
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,6 +37,7 @@ const SignUpForn = () => {
     }
 
     try {
+      resetFormFields();
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
         password
@@ -99,4 +102,4 @@ const SignUpForn = () => {
   );
 };
 
-export default SignUpForn;
+export default SignUpForm;
