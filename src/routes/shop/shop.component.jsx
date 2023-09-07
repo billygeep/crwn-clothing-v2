@@ -1,6 +1,14 @@
 import CategoryDirectory from "../../components/category-directory/category-directory.component";
-
+import { getWord } from "../../utils/firebase/firebase.utils";
+import { useEffect } from "react";
 const Shop = () => {
+  useEffect(async () => {
+    const words = await getWord();
+    if (words) {
+      console.log(words);
+    }
+  }, []);
+
   const categories = [
     {
       id: 1,
@@ -18,6 +26,7 @@ const Shop = () => {
       imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
     },
   ];
+
   return <CategoryDirectory categories={categories} />;
 };
 
