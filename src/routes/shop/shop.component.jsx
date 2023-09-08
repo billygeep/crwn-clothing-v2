@@ -1,6 +1,10 @@
 import CategoryDirectory from "../../components/category-directory/category-directory.component";
 import { getWord } from "../../utils/firebase/firebase.utils";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { ProductsContext } from "../../contexts/products.context";
+import ProductCard from "../../components/product-card/product-card.component";
+import "./shop.styles.scss";
+
 const Shop = () => {
   useEffect(async () => {
     const words = await getWord();
@@ -9,25 +13,15 @@ const Shop = () => {
     }
   }, []);
 
-  const categories = [
-    {
-      id: 1,
-      title: "hats",
-      imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-    },
-    {
-      id: 2,
-      title: "jackets",
-      imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-    },
-    {
-      id: 3,
-      title: "sneakers",
-      imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-    },
-  ];
+  const { products } = useContext(ProductsContext);
 
-  return <CategoryDirectory categories={categories} />;
+  return (
+    <div className="products-container">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product}></ProductCard>
+      ))}
+    </div>
+  );
 };
 
 export default Shop;
