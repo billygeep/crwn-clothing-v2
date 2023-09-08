@@ -1,17 +1,16 @@
-import CategoryDirectory from "../../components/category-directory/category-directory.component";
-import { getWord } from "../../utils/firebase/firebase.utils";
-import { useEffect, useContext } from "react";
+// import { getWord } from "../../utils/firebase/firebase.utils";
+import { useContext } from "react";
 import { ProductsContext } from "../../contexts/products.context";
 import ProductCard from "../../components/product-card/product-card.component";
 import "./shop.styles.scss";
 
 const Shop = () => {
-  useEffect(async () => {
-    const words = await getWord();
-    if (words) {
-      console.log(words);
-    }
-  }, []);
+  // useEffect(async () => {
+  //   const words = await getWord();
+  //   if (words) {
+  //     console.log(words);
+  //   }
+  // }, []);
 
   const { products } = useContext(ProductsContext);
 
