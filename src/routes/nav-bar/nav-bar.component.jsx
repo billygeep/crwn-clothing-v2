@@ -30,6 +30,9 @@ const NavBar = () => {
           <Link className="nav-link" to="/shop">
             SHOP
           </Link>
+          <Link className="nav-link" to="/check-out">
+            CHECK OUT
+          </Link>
           {currentUser ? (
             <span className="nav-link" onClick={signOutHandler}>
               SIGN OUT
