@@ -17,9 +17,11 @@ import {
   getDoc,
   setDoc,
   collection,
+  writeBatch,
   query,
   getDocs,
 } from "firebase/firestore";
+import { useEffect } from "react";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -34,6 +36,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+console.log(firebaseApp);
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
@@ -47,13 +50,41 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore();
 
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+  console.log("TRY THIS");
+  const querySnapShot = await getDocs(q);
+  const categoryMap = querySnapShot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
+
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}
 ) => {
   const userDocRef = doc(db, "users", userAuth.uid);
-
-  console.log(userDocRef);
 
   const userSnapshot = await getDoc(userDocRef);
   // tell us if user exists
@@ -91,21 +122,19 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangeListener = (callback) =>
   onAuthStateChanged(auth, callback);
 
-export const getWord = async () => {
-  const collectionRef = collection(db, "words");
+// export const getWord = async () => {
+//   const collectionRef = collection(db, "words");
 
-  const q = query(collectionRef);
-  const querySnapShot = await getDocs(q);
+//   const q = query(collectionRef);
+//   const querySnapShot = await getDocs(q);
 
-  console.log(querySnapShot.docs);
+//   console.log(querySnapShot.docs);
 
-  const wordMap = querySnapShot.docs.reduce((acc, docSnapshot) => {
-    const { id, word } = docSnapshot.data();
-    console.log(acc, id, word);
+//   return querySnapShot.docs.reduce((acc, docSnapshot) => {
+//     const { id, word } = docSnapshot.data();
+//     console.log(acc, id, word);
 
-    // acc[word.toLowerCase()] = items;
-    // return acc;
-  }, {});
-
-  return wordMap;
-};
+//     // acc[word.toLowerCase()] = items;
+//     // return acc;
+//   }, {});
+// };
