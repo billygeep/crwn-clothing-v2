@@ -11,11 +11,7 @@ const CategoriesPreview = () => {
       {Object.keys(categoriesMap).map((title) => {
         const products = categoriesMap[title];
         return (
-          <CategoryPreview
-            key={Math.random() * 1000}
-            title={title}
-            products={products}
-          />
+          <CategoryPreview key={title} title={title} products={products} />
         );
       })}
     </Fragment>
